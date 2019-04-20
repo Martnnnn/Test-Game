@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpielerSteuerung : MonoBehaviour
 {
-    
+    //Variablendeklaration
     public GameObject[] spieler;
     int anzahlSpieler;
     int aktuellerSpieler;
@@ -12,6 +12,7 @@ public class SpielerSteuerung : MonoBehaviour
 
     void Start()
     {
+        //Sucht alle GameObjects mit dem Spieler Tag und speichert sie in einem Array
         spieler =  GameObject.FindGameObjectsWithTag("Spieler");
         anzahlSpieler = spieler.Length;
         aktuellerSpieler = 0;
@@ -21,8 +22,10 @@ public class SpielerSteuerung : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Bekommt das Script vom aktuellen Spieler(Um Variablen zu lesen/schreiben)
         sSpieler script = spieler[aktuellerSpieler].GetComponent<sSpieler>();
 
+        //Bewegung von Spieler
         if (Input.GetKeyDown(KeyCode.W) && script.bewegung > 0)
         {
             spieler[aktuellerSpieler].transform.Translate(0, 1, 0);
@@ -43,6 +46,7 @@ public class SpielerSteuerung : MonoBehaviour
             spieler[aktuellerSpieler].transform.Translate(1, 0, 0);
             script.bewegung--;
         }
+        //Beenden der Runde
         if (Input.GetKeyDown(KeyCode.Space))
         {
             
@@ -50,6 +54,7 @@ public class SpielerSteuerung : MonoBehaviour
                 spieler[i].GetComponent<sSpieler>().bewegung = 5;
             }
         }
+        //Wechsel aktueller Charakter
         if (Input.GetKeyDown(KeyCode.Q))
         {
             aktuellerSpieler--;
