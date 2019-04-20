@@ -267,12 +267,12 @@ PrefabInstance:
     - target: {fileID: 3041706695715170644, guid: 81449041c2fecc54d989072d71db9a13,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.2581344
+      value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 3041706695715170644, guid: 81449041c2fecc54d989072d71db9a13,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2227447
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3041706695715170644, guid: 81449041c2fecc54d989072d71db9a13,
         type: 3}
@@ -2485,6 +2485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spieler: []
+  marker: {fileID: 4437835300458682780, guid: 813d4baf848c33a4eac72604658c9e69, type: 3}
 --- !u!4 &1492050211
 Transform:
   m_ObjectHideFlags: 0

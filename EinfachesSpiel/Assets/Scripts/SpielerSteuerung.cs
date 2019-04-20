@@ -8,6 +8,7 @@ public class SpielerSteuerung : MonoBehaviour
     public GameObject[] spieler;
     int anzahlSpieler;
     int aktuellerSpieler;
+    public GameObject marker;
     // Start is called before the first frame update
 
     void Start()
@@ -16,12 +17,15 @@ public class SpielerSteuerung : MonoBehaviour
         spieler =  GameObject.FindGameObjectsWithTag("Spieler");
         anzahlSpieler = spieler.Length;
         aktuellerSpieler = 0;
+        marker = Instantiate(marker, new Vector3(0, 0, 0), Quaternion.identity);
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        marker.transform.position = spieler[aktuellerSpieler].GetComponent<Transform>().position;
+        marker.transform.Translate(0, 0.66f+0.08f*Mathf.Sin(3f*Time.time), 0);
         //Bekommt das Script vom aktuellen Spieler(Um Variablen zu lesen/schreiben)
         sSpieler script = spieler[aktuellerSpieler].GetComponent<sSpieler>();
 
