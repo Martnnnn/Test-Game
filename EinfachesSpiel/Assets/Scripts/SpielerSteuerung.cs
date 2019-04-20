@@ -45,7 +45,10 @@ public class SpielerSteuerung : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            script.bewegung = 5;
+            
+            for(int i = 0; i<anzahlSpieler; i++){
+                spieler[i].GetComponent<sSpieler>().bewegung = 5;
+            }
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
