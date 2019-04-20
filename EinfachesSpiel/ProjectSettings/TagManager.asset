@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Boden
+    uniqueID: 24057187
+    locked: 0
+  - name: Spieler
+    uniqueID: 3270229749
+    locked: 0
