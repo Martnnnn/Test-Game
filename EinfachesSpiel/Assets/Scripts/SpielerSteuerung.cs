@@ -5,18 +5,30 @@ using UnityEngine;
 public class SpielerSteuerung : MonoBehaviour
 {
     //Variablendeklaration
-    public GameObject[] spieler;
+    public GameObject[] spieler1; //Liste aller Charaktere Spieler1
+    public GameObject[] spieler2; //Liste aller Charaktere Spieler2
+    public GameObject[] spieler; //Liste aller Charaktere des Spieler, der gerade an der Reihe ist
+    int anzahlSpieler1;
+    int anzahlSpieler2;
     int anzahlSpieler;
-    int aktuellerSpieler;
+    int aktuellerSpieler; //Int für das Array des aktuellen Spielers
     public GameObject marker;
+    public bool spielzug; //FALSE Spieler 1 ist am Zug
     // Start is called before the first frame update
 
     void Start()
     {
+        spielzug = false;
         //Sucht alle GameObjects mit dem Spieler Tag und speichert sie in einem Array
-        spieler =  GameObject.FindGameObjectsWithTag("Spieler");
-        anzahlSpieler = spieler.Length;
+        spieler1 =  GameObject.FindGameObjectsWithTag("Spieler");
+        anzahlSpieler1 = spieler1.Length;
+
+        //Sucht alle GameObjects mit dem Spieler2 Tag und speichert sie in einem Array
+        spieler2 = GameObject.FindGameObjectsWithTag("Spieler2");
+        anzahlSpieler2 = spieler2.Length;
+
         aktuellerSpieler = 0;
+        //Erzeugt einen Marker
         marker = Instantiate(marker, new Vector3(0, 0, 0), Quaternion.identity);
 
     }
@@ -24,8 +36,23 @@ public class SpielerSteuerung : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Überprüft, welcher Spieler gerade an der Reihe ist
+        if(spielzug == false)
+        {
+            spieler = spieler1;
+            anzahlSpieler = anzahlSpieler1;
+        }
+        else
+        {
+            spieler = spieler2;
+            anzahlSpieler = anzahlSpieler2;
+        }
+
+
+
+        //Setzt Marker über aktuellen Charakter
         marker.transform.position = spieler[aktuellerSpieler].GetComponent<Transform>().position;
-        marker.transform.Translate(0, 0.66f+0.08f*Mathf.Sin(3f*Time.time), 0);
+        marker.transform.Translate(0, 0.66f+0.05f*Mathf.Sin(3.5f*Time.time), 0);
         //Bekommt das Script vom aktuellen Spieler(Um Variablen zu lesen/schreiben)
         sSpieler script = spieler[aktuellerSpieler].GetComponent<sSpieler>();
 
@@ -50,14 +77,7 @@ public class SpielerSteuerung : MonoBehaviour
             spieler[aktuellerSpieler].transform.Translate(1, 0, 0);
             script.bewegung--;
         }
-        //Beenden der Runde
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            
-            for(int i = 0; i<anzahlSpieler; i++){
-                spieler[i].GetComponent<sSpieler>().bewegung = 5;
-            }
-        }
+
         //Wechsel aktueller Charakter
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -71,6 +91,20 @@ public class SpielerSteuerung : MonoBehaviour
         {
             aktuellerSpieler++;
             aktuellerSpieler = aktuellerSpieler % anzahlSpieler;
+        }
+
+        //Beenden der Runde
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+            for (int i = 0; i < anzahlSpieler; i++)
+            {
+                spieler[i].GetComponent<sSpieler>().bewegung = 5;
+            }
+            //Wechselt, wer an der Reihe ist
+            spielzug ^= true;
+            //Setzt aktuellen Charakter zurück(Um Überlauf bei ungleich großen Teams zu verhindern)
+            aktuellerSpieler = 0;
         }
     }
 }
