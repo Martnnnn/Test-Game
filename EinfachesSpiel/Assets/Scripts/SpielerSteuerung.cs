@@ -6,10 +6,10 @@ public class SpielerSteuerung : MonoBehaviour
     public GameObject[] spieler1; //Liste aller Charaktere Spieler1
     public GameObject[] spieler2; //Liste aller Charaktere Spieler2
     public GameObject[] spieler; //Liste aller Charaktere des Spieler, der gerade an der Reihe ist
-    int anzahlSpieler1;
-    int anzahlSpieler2;
-    int anzahlSpieler;
-    int aktuellerSpieler; //Int für das Array des aktuellen Spielers
+    public int anzahlSpieler1;
+    public int anzahlSpieler2;
+    public int anzahlSpieler;
+    public int aktuellerSpieler; //Int für das Array des aktuellen Spielers
     public GameObject marker;
     public bool spielzug; //FALSE Spieler 1 ist am Zug
     // Start is called before the first frame update
