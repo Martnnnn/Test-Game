@@ -54,7 +54,7 @@ public class SpielerSteuerung : MonoBehaviour
         marker.transform.position = spieler[aktuellerSpieler].GetComponent<Transform>().position;
         marker.transform.Translate(0, 0.66f+0.05f*Mathf.Sin(3.5f*Time.time), 0);
         //Bekommt das Script vom aktuellen Spieler(Um Variablen zu lesen/schreiben)
-        sSpieler script = spieler[aktuellerSpieler].GetComponent<sSpieler>();
+        StatsCharakter script = spieler[aktuellerSpieler].GetComponent<StatsCharakter>();
 
         //Bewegung von Spieler
         if (Input.GetKeyDown(KeyCode.W) && script.bewegung > 0)
@@ -99,7 +99,7 @@ public class SpielerSteuerung : MonoBehaviour
 
             for (int i = 0; i < anzahlSpieler; i++)
             {
-                spieler[i].GetComponent<sSpieler>().bewegung = 5;
+                spieler[i].GetComponent<StatsCharakter>().bewegung = 5;
             }
             //Wechselt, wer an der Reihe ist
             spielzug ^= true;

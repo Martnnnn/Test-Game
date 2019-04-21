@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class sSpieler : MonoBehaviour
+public class StatsCharakter : MonoBehaviour
 {
     //Hier kommen alle Charaktter bezogenen Variablen rein (Leben,Schaden usw.)
     public int bewegung;
