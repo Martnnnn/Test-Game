@@ -34,7 +34,7 @@ public class Stamina : MonoBehaviour
             }
             for (int i = staminaBars.Length; i < script.bewegung; i++)
             { //dann zusätzliche ins neue
-                newBars[i] = Instantiate(prefabStaminaBar, new Vector3(9, -4 + (1.2f * i), 0), Quaternion.identity);
+                newBars[i] = Instantiate(prefabStaminaBar, new Vector3(9.6f - i, -4f, 0), Quaternion.identity);
             }
             staminaBars = newBars; //pointer aufs neue umlegen
         }

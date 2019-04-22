@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1047921598597281570}
   - component: {fileID: 2988088046201721213}
-  - component: {fileID: 2805911439519623840}
+  - component: {fileID: 156795695450217083}
   m_Layer: 0
-  m_Name: Spieler2
-  m_TagString: Spieler2
+  m_Name: BigDude
+  m_TagString: Spieler
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2805911439519623840
+--- !u!114 &156795695450217083
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,8 +90,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6068089919875497666}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 110cde797fca3dd48b24c5d49bb75d8f, type: 3}
+  m_Script: {fileID: 11500000, guid: 32e3d36ec9a63614eb8a74f85f9ec44c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bewegung: 0
-  leben: 0
+  bewegung: 2
+  BEWEGUNG_MAX: 2
+  leben: 300
+  LEBEN_MAX: 300

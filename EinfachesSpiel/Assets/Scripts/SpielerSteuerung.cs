@@ -18,11 +18,11 @@ public class SpielerSteuerung : MonoBehaviour
     {
         spielzug = false;
         //Sucht alle GameObjects mit dem Spieler Tag und speichert sie in einem Array
-        spieler1 =  GameObject.FindGameObjectsWithTag("Spieler");
+        spieler1 =  GameObject.FindGameObjectsWithTag("Spieler0");
         anzahlSpieler1 = spieler1.Length;
 
         //Sucht alle GameObjects mit dem Spieler2 Tag und speichert sie in einem Array
-        spieler2 = GameObject.FindGameObjectsWithTag("Spieler2");
+        spieler2 = GameObject.FindGameObjectsWithTag("Spieler1");
         anzahlSpieler2 = spieler2.Length;
 
         aktuellerSpieler = 0;
@@ -97,7 +97,7 @@ public class SpielerSteuerung : MonoBehaviour
 
             for (int i = 0; i < anzahlSpieler; i++)
             {
-                spieler[i].GetComponent<StatsCharakter>().bewegung = 5;
+                spieler[i].GetComponent<StatsCharakter>().bewegung = spieler[i].GetComponent<StatsCharakter>().BEWEGUNG_MAX;
             }
             //Wechselt, wer an der Reihe ist
             spielzug ^= true;
