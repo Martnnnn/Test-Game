@@ -9,10 +9,14 @@ public class StatsCharakter : MonoBehaviour
     public int BEWEGUNG_MAX;
     public int leben;
     public int LEBEN_MAX;
+    public GameObject hinderniss;
+    GameObject eigenesHinderniss;
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Erstellt ein Hinderniss GameObject als eigenes Child
+       eigenesHinderniss = Instantiate(hinderniss,transform.position, Quaternion.identity);
+       eigenesHinderniss.transform.SetParent(transform);
     }
 
     // Update is called once per frame

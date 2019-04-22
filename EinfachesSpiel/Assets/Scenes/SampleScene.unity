@@ -2421,6 +2421,9 @@ MonoBehaviour:
   aktuellerSpieler: 0
   marker: {fileID: 4437835300458682780, guid: 813d4baf848c33a4eac72604658c9e69, type: 3}
   spielzug: 0
+  altPosition: {x: 0, y: 0, z: 0}
+  hindernisse: []
+  hindernissChild: []
 --- !u!4 &1492050211
 Transform:
   m_ObjectHideFlags: 0

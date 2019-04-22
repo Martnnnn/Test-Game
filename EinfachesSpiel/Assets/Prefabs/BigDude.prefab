@@ -97,3 +97,5 @@ MonoBehaviour:
   BEWEGUNG_MAX: 2
   leben: 300
   LEBEN_MAX: 300
+  hinderniss: {fileID: 4512715196616317922, guid: 958a22978e67bd84fa09c788e4577bb0,
+    type: 3}

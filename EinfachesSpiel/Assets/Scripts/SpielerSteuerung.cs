@@ -12,6 +12,9 @@ public class SpielerSteuerung : MonoBehaviour
     public int aktuellerSpieler; //Int für das Array des aktuellen Spielers
     public GameObject marker;
     public bool spielzug; //FALSE Spieler 1 ist am Zug
+    public Vector3 altPosition;
+    public GameObject[] hindernisse;
+    public GameObject[] hindernissChild;
     // Start is called before the first frame update
 
     void Start()
@@ -34,8 +37,17 @@ public class SpielerSteuerung : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Sucht nach allen Hindernissen auf der Karte
+        hindernissChild = GameObject.FindGameObjectsWithTag("Hinderniss");
+        for (int i = 0; i < hindernissChild.Length; i++)
+        {
+     
+            hindernisse[i] = hindernissChild[i].transform.parent.gameObject;
+        }
+
+
         //Überprüft, welcher Spieler gerade an der Reihe ist
-        if(spielzug == false)
+        if (spielzug == false)
         {
             spieler = spieler1;
             anzahlSpieler = anzahlSpieler1;
@@ -57,23 +69,68 @@ public class SpielerSteuerung : MonoBehaviour
         //Bewegung von Spieler
         if (Input.GetKeyDown(KeyCode.W) && script.bewegung > 0)
         {
+            //Speichert alte Position, falls zu dieser zurück gekehrt wird
+            altPosition = spieler[aktuellerSpieler].transform.position;
             spieler[aktuellerSpieler].transform.Translate(0, 1, 0);
-            script.bewegung--;
+
+            //Falls Kollision auftritt zurück setzten
+            if (KollisionUeberpruefung(spieler[aktuellerSpieler].transform.position))
+            {
+                spieler[aktuellerSpieler].transform.position = altPosition;
+            }
+            //Ansonsten Bewegung abziehen
+            else
+            {
+                script.bewegung--;
+            }
         }
         if (Input.GetKeyDown(KeyCode.S) && script.bewegung > 0)
         {
+            altPosition = spieler[aktuellerSpieler].transform.position;
             spieler[aktuellerSpieler].transform.Translate(0, -1, 0);
-            script.bewegung--;
+
+            //Falls Kollision auftritt zurück setzten
+            if (KollisionUeberpruefung(spieler[aktuellerSpieler].transform.position))
+            {
+                spieler[aktuellerSpieler].transform.position = altPosition;
+            }
+            //Ansonsten Bewegung abziehen
+            else
+            {
+                script.bewegung--;
+            }
         }
         if (Input.GetKeyDown(KeyCode.A) && script.bewegung > 0)
         {
+            altPosition = spieler[aktuellerSpieler].transform.position;
             spieler[aktuellerSpieler].transform.Translate(-1, 0, 0);
-            script.bewegung--;
+
+            //Falls Kollision auftritt zurück setzten
+            if (KollisionUeberpruefung(spieler[aktuellerSpieler].transform.position))
+            {
+                spieler[aktuellerSpieler].transform.position = altPosition;
+            }
+            //Ansonsten Bewegung abziehen
+            else
+            {
+                script.bewegung--;
+            }
         }
         if (Input.GetKeyDown(KeyCode.D) && script.bewegung > 0)
         {
+            altPosition = spieler[aktuellerSpieler].transform.position;
             spieler[aktuellerSpieler].transform.Translate(1, 0, 0);
-            script.bewegung--;
+
+            //Falls Kollision auftritt zurück setzten
+            if (KollisionUeberpruefung(spieler[aktuellerSpieler].transform.position))
+            {
+                spieler[aktuellerSpieler].transform.position = altPosition;
+            }
+            //Ansonsten Bewegung abziehen
+            else
+            {
+                script.bewegung--;
+            }
         }
 
         //Wechsel aktueller Charakter
@@ -105,4 +162,19 @@ public class SpielerSteuerung : MonoBehaviour
             aktuellerSpieler = 0;
         }
     }
+    bool KollisionUeberpruefung(Vector3 pos)
+    {
+        bool kollision = false;
+       
+        for(int i = 0; i < hindernisse.Length; i++)
+        {
+            //Entfernung von 0.1 lässt ein bisschen Spielraum, falls Mittelpunkt nicht exakt in der Mitte 
+            if (Vector3.Distance(pos, hindernisse[i].transform.position) < 0.1)
+            {
+                kollision = true;
+            }
+        }
+        return kollision;
+    }
 }
+
