@@ -39,9 +39,9 @@ public class SpielerSteuerung : MonoBehaviour
     {
         //Sucht nach allen Hindernissen auf der Karte
         hindernissChild = GameObject.FindGameObjectsWithTag("Hinderniss");
+        hindernisse = new GameObject[hindernissChild.Length];
         for (int i = 0; i < hindernissChild.Length; i++)
         {
-     
             hindernisse[i] = hindernissChild[i].transform.parent.gameObject;
         }
 
@@ -164,17 +164,23 @@ public class SpielerSteuerung : MonoBehaviour
     }
     bool KollisionUeberpruefung(Vector3 pos)
     {
-        bool kollision = false;
+        int kollision = 0;
        
         for(int i = 0; i < hindernisse.Length; i++)
         {
             //Entfernung von 0.1 lässt ein bisschen Spielraum, falls Mittelpunkt nicht exakt in der Mitte 
-            if (Vector3.Distance(pos, hindernisse[i].transform.position) < 0.1)
+            //Und nicht das eigene Objekt ist
+            if (Vector3.Distance(pos, hindernisse[i].transform.position) < 0.5)
             {
-                kollision = true;
+                
+                kollision++;
             }
-        }
-        return kollision;
+            Debug.Log("Anzahl:" + i);
+            Debug.Log(Vector3.Distance(pos, hindernisse[i].transform.position));
+            Debug.Log(kollision);
+            Debug.Log(hindernisse[i].GetInstanceID() +" "+ this.GetInstanceID());
+        }        
+        return kollision > 1;
     }
 }
 
