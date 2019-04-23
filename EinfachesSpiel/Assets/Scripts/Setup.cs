@@ -26,7 +26,7 @@ public class Setup : MonoBehaviour
             for (int i = 0; i < spieler[sp].Length; i++)
             {
                 zuletztErstellterSpieler = null;
-                pos = new Vector3((int)(10 * Random.value - 5), (int)(10 * Random.value - 5), 0);
+                pos = new Vector3((int)(10 * Random.value - 5.5), (int)(10 * Random.value - 5.5), 0);
                 switch (spieler[sp][i])
                 {
                     case "BD":

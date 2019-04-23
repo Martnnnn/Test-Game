@@ -197,7 +197,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0.5, y: -0.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -273,7 +273,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1432272338}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1118982939}
@@ -296,7 +296,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 76dabb3bbc8b8e34ebc3d99c1ad0d3f2, type: 2}
+  - {fileID: 2100000, guid: 9000bfad30c50cf43a439490ed9a24bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2412,6 +2412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f150f11715292244eb033454ba19640f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aktuellerCursor: 0
   spieler1: []
   spieler2: []
   spieler: []
@@ -2419,11 +2420,15 @@ MonoBehaviour:
   anzahlSpieler2: 0
   anzahlSpieler: 0
   aktuellerSpieler: 0
+  aktuellesZiel: 0
   marker: {fileID: 4437835300458682780, guid: 813d4baf848c33a4eac72604658c9e69, type: 3}
+  angriffsMarker: {fileID: 3021521008375148934, guid: 76e9af857f07bd84d9204bd2b1b4e312,
+    type: 3}
   spielzug: 0
   altPosition: {x: 0, y: 0, z: 0}
   hindernisse: []
   hindernissChild: []
+  moeglicheZiele: []
 --- !u!4 &1492050211
 Transform:
   m_ObjectHideFlags: 0
