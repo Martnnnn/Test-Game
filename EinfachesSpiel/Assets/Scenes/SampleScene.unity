@@ -2393,6 +2393,7 @@ GameObject:
   - component: {fileID: 1492050210}
   - component: {fileID: 1492050212}
   - component: {fileID: 1492050213}
+  - component: {fileID: 1492050214}
   m_Layer: 0
   m_Name: Global
   m_TagString: Untagged
@@ -2474,3 +2475,21 @@ MonoBehaviour:
     type: 3}
   prefabDefaultDude: {fileID: 5809070770240352252, guid: 81449041c2fecc54d989072d71db9a13,
     type: 3}
+--- !u!114 &1492050214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492050209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d910371ee93698640bdb460e5e28c884, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IPAdrr: 
+  connectionId: 0
+  error: 0
+  hostId: 0
+  reliableCh: 0
+  unreliableCh: 0

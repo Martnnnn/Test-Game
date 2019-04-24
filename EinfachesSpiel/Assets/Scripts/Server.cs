@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Networking;
 
 public class Server : MonoBehaviour
@@ -10,6 +11,9 @@ public class Server : MonoBehaviour
     public int hostId;
     public int reliableCh;
     public int unreliableCh;
+    //angekommende Daten; über Funktion abholen
+    public Boolean hasMissedData;
+    private byte[] incData = new byte[0];
     // Start is called before the first frame update
     private void Start()
     {
@@ -45,24 +49,18 @@ public class Server : MonoBehaviour
         }
     }
 
-    public void Send(byte[] send, byte reliable0fast1)
+    public void Send(byte[] send, Boolean reliable)
     {
         int bufferSize = send.Length;
 
-        if (reliable0fast1 == 0)
+        if (reliable)
         {
             NetworkTransport.Send(hostId, connectionId, reliableCh, send, bufferSize, out error);
         }
-        else if (reliable0fast1 == 1)
+        else
         {
             NetworkTransport.Send(hostId, connectionId, unreliableCh, send, bufferSize, out error);
         }
-        else
-        {
-            Debug.Log("Nur 1 oder 0 beim Senden benutzen");
-        }
-
-
 
         if ((NetworkError)error != NetworkError.Ok)
         {
@@ -70,26 +68,70 @@ public class Server : MonoBehaviour
         }
     }
 
+
+    /*
+     * @return true falls Daten nicht rechtzeitig abgeholt wurden
+     */
+    public Boolean getRecData(out byte[] recData)
+    {
+        recData = incData;
+        incData = new byte[0];
+        Boolean returnB = false;
+        if (hasMissedData)
+        {
+            returnB = true;
+            hasMissedData = false;
+        }
+        return returnB;
+    }
+
     void Update()
     {
 
         int recHostId;
-        int connectionId;
+        int otherConnectionId;
         int channelId;
         byte[] recBuffer = new byte[1024];
         int bufferSize = 1024;
         int dataSize;
         byte error;
-        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
+        NetworkEventType recData = NetworkTransport.Receive(out recHostId, out otherConnectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
         switch (recData)
         {
             case NetworkEventType.Nothing: break;
-            case NetworkEventType.ConnectEvent: break;
-            case NetworkEventType.DataEvent: break;
-            case NetworkEventType.DisconnectEvent: break;
-
+            case NetworkEventType.ConnectEvent:
+                if (otherConnectionId == connectionId)
+                { 
+                    Debug.Log("cool (Verbinden erfolgreich)");
+                }
+                else
+                {
+                    Debug.Log("not cool (Verbinden nicht erfolgreich)");
+                }
+            break;
+            case NetworkEventType.DataEvent:
+                if (incData.Length > 0)
+                {
+                    hasMissedData = true;
+                }
+                incData = recBuffer;
+                if((NetworkError) error == NetworkError.MessageToLong)
+                {
+                    Debug.Log("not cool (erhaltene Nachricht zu lang)");
+                }
+                break;
+            case NetworkEventType.DisconnectEvent:
+                if (otherConnectionId == connectionId)
+                {
+                    Debug.Log("cool (Verbindung erfolgreich aufgelöst)");
+                }
+                else
+                {
+                    Debug.Log("not cool (Verbindung nicht erfolgreich aufgelöst)");
+                }
+                break;
             case NetworkEventType.BroadcastEvent:
-
+                Debug.Log("BroadcastEvent (wurde ignoriert)");
                 break;
         }
     }

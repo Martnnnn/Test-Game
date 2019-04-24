@@ -3,6 +3,9 @@
 public class SpielerSteuerung : MonoBehaviour
 {
 
+    //für multiplayer wichtig
+    public Server server;
+
     //Variablendeklaration
 
     public enum Cursor {bewegen, zielauswählen};
@@ -27,6 +30,9 @@ public class SpielerSteuerung : MonoBehaviour
 
     void Start()
     {
+        //für multi
+        server = GameObject.Find("/Global").GetComponent<Server>();
+
         spielzug = false;
         //Sucht alle GameObjects mit dem Spieler Tag und speichert sie in einem Array
         spieler1 =  GameObject.FindGameObjectsWithTag("Spieler0");
@@ -47,6 +53,26 @@ public class SpielerSteuerung : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //debug
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            server.Send(new byte[] { 10, 0 }, true);
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            server.Send(new byte[] { 0, 10 }, true);
+        }
+        byte[] inc = new byte[1024];
+        string s = "Daten abholen erfolgreicht: " + !server.getRecData(out inc);
+        if (inc.Length > 0)
+        {
+            Debug.Log(s);
+            Debug.Log("Daten abgeholt: " + inc[0] + ", " + inc[1]);
+        }
+
+
+
         //Führt Funktion je nach aktuellem Cursor Zustand aus
         switch (aktuellerCursor)
         {
@@ -172,6 +198,7 @@ public class SpielerSteuerung : MonoBehaviour
         //Wechsel aktueller Charakter
         if (Input.GetKeyDown(KeyCode.Q))
         {
+
             aktuellerSpieler--;
             if (aktuellerSpieler < 0)
             {
