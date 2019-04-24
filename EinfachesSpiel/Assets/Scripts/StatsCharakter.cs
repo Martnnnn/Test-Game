@@ -14,7 +14,7 @@ public class StatsCharakter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Erstellt ein Hinderniss GameObject als eigenes Child
+       //Erstellt ein stantiatenHinderniss GameObject als eigenes Child
        eigenesHinderniss = Instantiate(hinderniss,transform.position, Quaternion.identity);
        eigenesHinderniss.transform.SetParent(transform);
     }

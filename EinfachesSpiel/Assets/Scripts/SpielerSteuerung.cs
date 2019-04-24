@@ -2,7 +2,12 @@
 
 public class SpielerSteuerung : MonoBehaviour
 {
+
     //Variablendeklaration
+
+    public enum Cursor {bewegen, zielauswählen};
+    public Cursor aktuellerCursor;
+
     public GameObject[] spieler1; //Liste aller Charaktere Spieler1
     public GameObject[] spieler2; //Liste aller Charaktere Spieler2
     public GameObject[] spieler; //Liste aller Charaktere des Spieler, der gerade an der Reihe ist
@@ -10,11 +15,14 @@ public class SpielerSteuerung : MonoBehaviour
     public int anzahlSpieler2;
     public int anzahlSpieler;
     public int aktuellerSpieler; //Int für das Array des aktuellen Spielers
+    public int aktuellesZiel;
     public GameObject marker;
+    public GameObject angriffsMarker;
     public bool spielzug; //FALSE Spieler 1 ist am Zug
     public Vector3 altPosition;
     public GameObject[] hindernisse;
     public GameObject[] hindernissChild;
+    public GameObject[] moeglicheZiele;
     // Start is called before the first frame update
 
     void Start()
@@ -29,19 +37,47 @@ public class SpielerSteuerung : MonoBehaviour
         anzahlSpieler2 = spieler2.Length;
 
         aktuellerSpieler = 0;
-        //Erzeugt einen Marker
+        //Erzeugt die Marker
         marker = Instantiate(marker, new Vector3(0, 0, 0), Quaternion.identity);
+        angriffsMarker = Instantiate(angriffsMarker, new Vector3(0, 0, 0), Quaternion.identity);
+        angriffsMarker.GetComponent<SpriteRenderer>().enabled = false;
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Führt Funktion je nach aktuellem Cursor Zustand aus
+        switch (aktuellerCursor)
+        {
+            case Cursor.bewegen:
+                marker.GetComponent<SpriteRenderer>().enabled = true;
+                SpielerBewegen();
+                break;
+
+            case Cursor.zielauswählen:
+                angriffsMarker.GetComponent<SpriteRenderer>().enabled = true;
+                ZielAussuchen();
+                break;
+
+            default:
+                marker.GetComponent<SpriteRenderer>().enabled = true;
+                aktuellerCursor = Cursor.bewegen;
+                break;
+
+        }
+
+       
+    }
+
+    //Enthält Charakter bewegen, Charakter wechseln, Runde beenden
+    void SpielerBewegen()
+    {
         //Sucht nach allen Hindernissen auf der Karte
         hindernissChild = GameObject.FindGameObjectsWithTag("Hinderniss");
+        hindernisse = new GameObject[hindernissChild.Length];
         for (int i = 0; i < hindernissChild.Length; i++)
         {
-     
             hindernisse[i] = hindernissChild[i].transform.parent.gameObject;
         }
 
@@ -62,7 +98,7 @@ public class SpielerSteuerung : MonoBehaviour
 
         //Setzt Marker über aktuellen Charakter
         marker.transform.position = spieler[aktuellerSpieler].GetComponent<Transform>().position;
-        marker.transform.Translate(0, 0.66f+0.05f*Mathf.Sin(3.5f*Time.time), 0);
+        marker.transform.Translate(0, 0.66f + 0.05f * Mathf.Sin(3.5f * Time.time), 0);
         //Bekommt das Script vom aktuellen Spieler(Um Variablen zu lesen/schreiben)
         StatsCharakter script = spieler[aktuellerSpieler].GetComponent<StatsCharakter>();
 
@@ -137,7 +173,7 @@ public class SpielerSteuerung : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             aktuellerSpieler--;
-            if(aktuellerSpieler < 0)
+            if (aktuellerSpieler < 0)
             {
                 aktuellerSpieler = anzahlSpieler - 1;
             }
@@ -146,6 +182,13 @@ public class SpielerSteuerung : MonoBehaviour
         {
             aktuellerSpieler++;
             aktuellerSpieler = aktuellerSpieler % anzahlSpieler;
+        }
+
+        //Wechsel zur Zielauswahl
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            marker.GetComponent<SpriteRenderer>().enabled = false;
+            aktuellerCursor = Cursor.zielauswählen;
         }
 
         //Beenden der Runde
@@ -160,21 +203,71 @@ public class SpielerSteuerung : MonoBehaviour
             spielzug ^= true;
             //Setzt aktuellen Charakter zurück(Um Überlauf bei ungleich großen Teams zu verhindern)
             aktuellerSpieler = 0;
+            aktuellesZiel = 0;
+            aktuellerCursor = Cursor.bewegen;
         }
+
+
+
     }
+
+    void ZielAussuchen()
+    {
+
+        if (spielzug)
+        {
+            moeglicheZiele = GameObject.FindGameObjectsWithTag("Spieler0");
+        }
+        else
+        {
+            moeglicheZiele = GameObject.FindGameObjectsWithTag("Spieler1");
+        }
+
+        //Wechsel aktuelles Ziel
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            aktuellesZiel--;
+            if (aktuellesZiel < 0)
+            {
+                aktuellesZiel = moeglicheZiele.Length - 1;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            aktuellesZiel++;
+            aktuellesZiel = aktuellesZiel % moeglicheZiele.Length;
+        }
+
+
+        //Setzt Marker über aktuellen Charakter
+        angriffsMarker.transform.position = moeglicheZiele[aktuellesZiel].GetComponent<Transform>().position;
+        //Bekommt das Script vom aktuellen Spieler(Um Variablen zu lesen/schreiben)
+        StatsCharakter gegnerScript = moeglicheZiele[aktuellesZiel].GetComponent<StatsCharakter>();
+
+        //Rückkehr zum Bewegen
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            angriffsMarker.GetComponent<SpriteRenderer>().enabled = false;
+            aktuellerCursor = Cursor.bewegen;
+        }
+
+    }
+
     bool KollisionUeberpruefung(Vector3 pos)
     {
-        bool kollision = false;
+        int kollision = 0;
        
         for(int i = 0; i < hindernisse.Length; i++)
         {
             //Entfernung von 0.1 lässt ein bisschen Spielraum, falls Mittelpunkt nicht exakt in der Mitte 
-            if (Vector3.Distance(pos, hindernisse[i].transform.position) < 0.1)
+            //Und nicht das eigene Objekt ist
+            if (Vector3.Distance(pos, hindernisse[i].transform.position) < 0.5)
             {
-                kollision = true;
+                
+                kollision++;
             }
-        }
-        return kollision;
+        }        
+        return kollision > 1;
     }
 }
 
