@@ -33,7 +33,7 @@ public class Server : MonoBehaviour
 
         hostId = NetworkTransport.AddHost(topology, 8888);
 
-        connectionId = NetworkTransport.Connect(hostId, "192.168.1.42", 8888, 0, out error);
+        connectionId = NetworkTransport.Connect(hostId, IPAdrr, 8888, 0, out error);
 
         if ((NetworkError)error == NetworkError.Ok)
         {
