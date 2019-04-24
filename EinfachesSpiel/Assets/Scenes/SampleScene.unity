@@ -2413,6 +2413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f150f11715292244eb033454ba19640f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  server: {fileID: 0}
   aktuellerCursor: 0
   spieler1: []
   spieler2: []
@@ -2487,9 +2488,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d910371ee93698640bdb460e5e28c884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IPAdrr: 
+  IPAdrr: 127.0.0.1
   connectionId: 0
   error: 0
   hostId: 0
   reliableCh: 0
   unreliableCh: 0
+  hasMissedData: 0
