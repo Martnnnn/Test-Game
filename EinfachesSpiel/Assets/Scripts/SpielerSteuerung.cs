@@ -103,7 +103,7 @@ public class SpielerSteuerung : MonoBehaviour
         StatsCharakter script = spieler[aktuellerSpieler].GetComponent<StatsCharakter>();
 
         //Bewegung von Spieler
-        if (Input.GetKeyDown(KeyCode.W) && script.bewegung > 0)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && script.bewegung > 0)
         {
             //Speichert alte Position, falls zu dieser zurück gekehrt wird
             altPosition = spieler[aktuellerSpieler].transform.position;
@@ -120,7 +120,7 @@ public class SpielerSteuerung : MonoBehaviour
                 script.bewegung--;
             }
         }
-        if (Input.GetKeyDown(KeyCode.S) && script.bewegung > 0)
+        if (Input.GetKeyDown(KeyCode.DownArrow) && script.bewegung > 0)
         {
             altPosition = spieler[aktuellerSpieler].transform.position;
             spieler[aktuellerSpieler].transform.Translate(0, -1, 0);
@@ -136,7 +136,7 @@ public class SpielerSteuerung : MonoBehaviour
                 script.bewegung--;
             }
         }
-        if (Input.GetKeyDown(KeyCode.A) && script.bewegung > 0)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && script.bewegung > 0)
         {
             altPosition = spieler[aktuellerSpieler].transform.position;
             spieler[aktuellerSpieler].transform.Translate(-1, 0, 0);
@@ -152,7 +152,7 @@ public class SpielerSteuerung : MonoBehaviour
                 script.bewegung--;
             }
         }
-        if (Input.GetKeyDown(KeyCode.D) && script.bewegung > 0)
+        if (Input.GetKeyDown(KeyCode.RightArrow) && script.bewegung > 0)
         {
             altPosition = spieler[aktuellerSpieler].transform.position;
             spieler[aktuellerSpieler].transform.Translate(1, 0, 0);
@@ -170,7 +170,7 @@ public class SpielerSteuerung : MonoBehaviour
         }
 
         //Wechsel aktueller Charakter
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             aktuellerSpieler--;
             if (aktuellerSpieler < 0)
@@ -178,7 +178,7 @@ public class SpielerSteuerung : MonoBehaviour
                 aktuellerSpieler = anzahlSpieler - 1;
             }
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.RightShift))
         {
             aktuellerSpieler++;
             aktuellerSpieler = aktuellerSpieler % anzahlSpieler;
