@@ -11,18 +11,15 @@ public class SpielerSteuerung : MonoBehaviour
     public GameObject[] spieler1; //Liste aller Charaktere Spieler1
     public GameObject[] spieler2; //Liste aller Charaktere Spieler2
     public GameObject[] spieler; //Liste aller Charaktere des Spieler, der gerade an der Reihe ist
-    public int anzahlSpieler1;
-    public int anzahlSpieler2;
     public int anzahlSpieler;
     public int aktuellerSpieler; //Int für das Array des aktuellen Spielers
     public int aktuellesZiel;
     public GameObject marker;
     public GameObject angriffsMarker;
-    public bool spielzug; //FALSE Spieler 1 ist am Zug
+    public bool spielzug; //FALSE Spieler 1 (Spieler0) ist am Zug
     public Vector3 altPosition;
     public GameObject[] hindernisse;
     public GameObject[] hindernissChild;
-    public GameObject[] moeglicheZiele;
     // Start is called before the first frame update
 
     void Start()
@@ -30,18 +27,15 @@ public class SpielerSteuerung : MonoBehaviour
         spielzug = false;
         //Sucht alle GameObjects mit dem Spieler Tag und speichert sie in einem Array
         spieler1 =  GameObject.FindGameObjectsWithTag("Spieler0");
-        anzahlSpieler1 = spieler1.Length;
 
         //Sucht alle GameObjects mit dem Spieler2 Tag und speichert sie in einem Array
         spieler2 = GameObject.FindGameObjectsWithTag("Spieler1");
-        anzahlSpieler2 = spieler2.Length;
 
         aktuellerSpieler = 0;
         //Erzeugt die Marker
         marker = Instantiate(marker, new Vector3(0, 0, 0), Quaternion.identity);
         angriffsMarker = Instantiate(angriffsMarker, new Vector3(0, 0, 0), Quaternion.identity);
         angriffsMarker.GetComponent<SpriteRenderer>().enabled = false;
-
     }
 
     // Update is called once per frame
@@ -73,101 +67,72 @@ public class SpielerSteuerung : MonoBehaviour
     //Enthält Charakter bewegen, Charakter wechseln, Runde beenden
     void SpielerBewegen()
     {
-        //Sucht nach allen Hindernissen auf der Karte
-        hindernissChild = GameObject.FindGameObjectsWithTag("Hinderniss");
-        hindernisse = new GameObject[hindernissChild.Length];
-        for (int i = 0; i < hindernissChild.Length; i++)
+
+        //falls benötigt
+        //StatsCharakter script = spieler[aktuellerSpieler].GetComponent<StatsCharakter>();
+
+        //Bewegung von Spieler
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            hindernisse[i] = hindernissChild[i].transform.parent.gameObject;
+            move(0, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            move(0, -1);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            move(-1, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            move(1, 0);
         }
 
+        zeigerWechsel(true);
 
-        //Überprüft, welcher Spieler gerade an der Reihe ist
-        if (spielzug == false)
+        //Beenden der Runde
+        endRound();
+
+
+    }
+
+    void ZielAussuchen()
+    {
+        //eigene Funktion, weil mehr Zeug vermutlich benötigt
+        zeigerWechsel(false);
+    }
+
+    void endRound()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+            for (int i = 0; i < anzahlSpieler; i++)
+            {
+                spieler[i].GetComponent<StatsCharakter>().bewegung = spieler[i].GetComponent<StatsCharakter>().BEWEGUNG_MAX;
+            }
+            //Wechselt, wer an der Reihe ist
+            spielzug ^= true;
+            //Setzt aktuellen Charakter zurück(Um Überlauf bei ungleich großen Teams zu verhindern)
+            aktuellerSpieler = 0;
+            aktuellesZiel = 0;
+            aktuellerCursor = Cursor.bewegen;
+        }
+    }
+    
+    void zeigerWechsel(bool ownTeam)
+    {
+        //wessen Spieler
+        if (spielzug ^ ownTeam)
         {
             spieler = spieler1;
-            anzahlSpieler = anzahlSpieler1;
         }
         else
         {
             spieler = spieler2;
-            anzahlSpieler = anzahlSpieler2;
         }
-
-
-
-        //Setzt Marker über aktuellen Charakter
-        marker.transform.position = spieler[aktuellerSpieler].GetComponent<Transform>().position;
-        marker.transform.Translate(0, 0.66f + 0.05f * Mathf.Sin(3.5f * Time.time), 0);
-        //Bekommt das Script vom aktuellen Spieler(Um Variablen zu lesen/schreiben)
-        StatsCharakter script = spieler[aktuellerSpieler].GetComponent<StatsCharakter>();
-
-        //Bewegung von Spieler
-        if (Input.GetKeyDown(KeyCode.UpArrow) && script.bewegung > 0)
-        {
-            //Speichert alte Position, falls zu dieser zurück gekehrt wird
-            altPosition = spieler[aktuellerSpieler].transform.position;
-            spieler[aktuellerSpieler].transform.Translate(0, 1, 0);
-
-            //Falls Kollision auftritt zurück setzten
-            if (KollisionUeberpruefung(spieler[aktuellerSpieler].transform.position))
-            {
-                spieler[aktuellerSpieler].transform.position = altPosition;
-            }
-            //Ansonsten Bewegung abziehen
-            else
-            {
-                script.bewegung--;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow) && script.bewegung > 0)
-        {
-            altPosition = spieler[aktuellerSpieler].transform.position;
-            spieler[aktuellerSpieler].transform.Translate(0, -1, 0);
-
-            //Falls Kollision auftritt zurück setzten
-            if (KollisionUeberpruefung(spieler[aktuellerSpieler].transform.position))
-            {
-                spieler[aktuellerSpieler].transform.position = altPosition;
-            }
-            //Ansonsten Bewegung abziehen
-            else
-            {
-                script.bewegung--;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && script.bewegung > 0)
-        {
-            altPosition = spieler[aktuellerSpieler].transform.position;
-            spieler[aktuellerSpieler].transform.Translate(-1, 0, 0);
-
-            //Falls Kollision auftritt zurück setzten
-            if (KollisionUeberpruefung(spieler[aktuellerSpieler].transform.position))
-            {
-                spieler[aktuellerSpieler].transform.position = altPosition;
-            }
-            //Ansonsten Bewegung abziehen
-            else
-            {
-                script.bewegung--;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow) && script.bewegung > 0)
-        {
-            altPosition = spieler[aktuellerSpieler].transform.position;
-            spieler[aktuellerSpieler].transform.Translate(1, 0, 0);
-
-            //Falls Kollision auftritt zurück setzten
-            if (KollisionUeberpruefung(spieler[aktuellerSpieler].transform.position))
-            {
-                spieler[aktuellerSpieler].transform.position = altPosition;
-            }
-            //Ansonsten Bewegung abziehen
-            else
-            {
-                script.bewegung--;
-            }
-        }
+        anzahlSpieler = spieler.Length;
 
         //Wechsel aktueller Charakter
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -184,90 +149,77 @@ public class SpielerSteuerung : MonoBehaviour
             aktuellerSpieler = aktuellerSpieler % anzahlSpieler;
         }
 
+        //Modus wechseln
+
         //Wechsel zur Zielauswahl
-        if (Input.GetKeyDown(KeyCode.F))
+        if (ownTeam && Input.GetKeyDown(KeyCode.F))
         {
             marker.GetComponent<SpriteRenderer>().enabled = false;
             aktuellerCursor = Cursor.zielauswählen;
         }
-
-        //Beenden der Runde
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-
-            for (int i = 0; i < anzahlSpieler; i++)
-            {
-                spieler[i].GetComponent<StatsCharakter>().bewegung = spieler[i].GetComponent<StatsCharakter>().BEWEGUNG_MAX;
-            }
-            //Wechselt, wer an der Reihe ist
-            spielzug ^= true;
-            //Setzt aktuellen Charakter zurück(Um Überlauf bei ungleich großen Teams zu verhindern)
-            aktuellerSpieler = 0;
-            aktuellesZiel = 0;
-            aktuellerCursor = Cursor.bewegen;
-        }
-
-
-
-    }
-
-    void ZielAussuchen()
-    {
-
-        if (spielzug)
-        {
-            moeglicheZiele = GameObject.FindGameObjectsWithTag("Spieler0");
-        }
-        else
-        {
-            moeglicheZiele = GameObject.FindGameObjectsWithTag("Spieler1");
-        }
-
-        //Wechsel aktuelles Ziel
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            aktuellesZiel--;
-            if (aktuellesZiel < 0)
-            {
-                aktuellesZiel = moeglicheZiele.Length - 1;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            aktuellesZiel++;
-            aktuellesZiel = aktuellesZiel % moeglicheZiele.Length;
-        }
-
-
-        //Setzt Marker über aktuellen Charakter
-        angriffsMarker.transform.position = moeglicheZiele[aktuellesZiel].GetComponent<Transform>().position;
-        //Bekommt das Script vom aktuellen Spieler(Um Variablen zu lesen/schreiben)
-        StatsCharakter gegnerScript = moeglicheZiele[aktuellesZiel].GetComponent<StatsCharakter>();
-
         //Rückkehr zum Bewegen
-        if (Input.GetKeyDown(KeyCode.F))
+        if (!ownTeam && Input.GetKeyDown(KeyCode.F))
         {
             angriffsMarker.GetComponent<SpriteRenderer>().enabled = false;
             aktuellerCursor = Cursor.bewegen;
         }
 
+        //Setzt (potentiell aktualisierten) Marker über aktuellen Charakter
+        if (ownTeam)
+        {
+            marker.transform.position = spieler[aktuellerSpieler].GetComponent<Transform>().position;
+            marker.transform.Translate(0, 0.66f + 0.05f * Mathf.Sin(3.5f * Time.time), 0);
+        }
+        else
+        {
+            angriffsMarker.transform.position = spieler[aktuellerSpieler].GetComponent<Transform>().position;
+        }
     }
 
-    bool KollisionUeberpruefung(Vector3 pos)
+    void move(int x, int y)
     {
-        int kollision = 0;
-       
-        for(int i = 0; i < hindernisse.Length; i++)
+        StatsCharakter script = spieler[aktuellerSpieler].GetComponent<StatsCharakter>();
+        if (script.bewegung > 0)
+        {
+            Vector3 position = spieler[aktuellerSpieler].transform.position;
+
+            //Falls Kollision auftritt zurück setzten
+            if (!KollisionUeberpruefung(new Vector2(position[0] + x, position[1] + y)))
+            {
+                spieler[aktuellerSpieler].transform.Translate(x, y, 0);
+                script.bewegung--;
+            }
+        }
+    }
+
+    bool KollisionUeberpruefung(Vector2 pos)
+    {
+        bool kollision = false;
+
+        //Sucht nach allen Hindernissen auf der Karte
+        hindernissChild = GameObject.FindGameObjectsWithTag("Hinderniss");
+        hindernisse = new GameObject[hindernissChild.Length];
+        for (int i = 0; i < hindernissChild.Length; i++)
+        {
+            hindernisse[i] = hindernissChild[i].transform.parent.gameObject;
+        }
+
+        //helfender Hilfs-Vektor ist hilfreich am helfen
+        Vector2 hilfsV;
+        for (int i = 0; i < hindernisse.Length; i++)
         {
             //Entfernung von 0.1 lässt ein bisschen Spielraum, falls Mittelpunkt nicht exakt in der Mitte 
             //Und nicht das eigene Objekt ist
-            if (Vector3.Distance(pos, hindernisse[i].transform.position) < 0.5)
+
+            hilfsV = new Vector2(hindernisse[i].transform.position[0], hindernisse[i].transform.position[1]);
+            
+            if (Vector2.Distance(pos, hilfsV) < 0.5)
             {
-                
-                kollision++;
+                kollision = true; ;
             }
-        }        
-        return kollision > 1;
+        }
+        
+        return kollision;
     }
 }
 
