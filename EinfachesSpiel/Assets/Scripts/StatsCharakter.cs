@@ -9,6 +9,8 @@ public class StatsCharakter : MonoBehaviour
     public int BEWEGUNG_MAX;
     public int leben;
     public int LEBEN_MAX;
+    public string attacke; //nicht so drauf zugreifen
+    //anderes Zeug
     public GameObject hinderniss;
     GameObject eigenesHinderniss;
     // Start is called before the first frame update
@@ -19,9 +21,15 @@ public class StatsCharakter : MonoBehaviour
        eigenesHinderniss.transform.SetParent(transform);
     }
 
-    // Update is called once per frame
-    void Update()
+    public Attack getAttack() //scheiß Lösung aber geht nicht besser
     {
-        
+        switch (attacke)
+        {
+            case "AtSimpleLine" :
+                return new AtSimpleLine();
+        }
+        //falls fehler in abgefragten cases oder angegebenen attacke
+        Debug.Log("konnte keine Attacke finden");
+        return null;
     }
 }

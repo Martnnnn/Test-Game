@@ -40,8 +40,16 @@ public class AttackShape //erbt nicht von MonoBehaviour
      *                                                                       |
      */
 
+    public AttackShape(float[,] damagePattern, bool[,] repitionPattern, int maxRepitions, float repitionDampening)
+    {
+        this.damagePattern = damagePattern;
+        this.repitionPattern = repitionPattern;
+        this.maxRepitions = maxRepitions;
+        this.repitionDampening = repitionDampening;
+    }
+
     public float hit(int direction, Vector2 relativePos) //relativePos als Differenz zwichen benutzender Spieler und potentiellem Ziel
-                                                                //direction 0 : UP; 1 : RIGHT; 2 : DOWN; 3 : LEFT
+                                                         //direction 0 : UP; 1 : RIGHT; 2 : DOWN; 3 : LEFT
     {
         //adjustiere für direction
         switch(direction)

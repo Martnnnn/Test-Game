@@ -13,6 +13,7 @@ public class SpielerSteuerung : MonoBehaviour
     public GameObject[] spieler; //Liste aller Charaktere des Spieler, der gerade an der Reihe ist
     public int anzahlSpieler;
     public int aktuellerSpieler; //Int für das Array des aktuellen Spielers
+    public int angreifenderSpieler = -1; //vorm zum Angreifen gewechselten, ausgewählter Spielers
     public int aktuellesZiel;
     public GameObject marker;
     public GameObject angriffsMarker;
@@ -99,8 +100,17 @@ public class SpielerSteuerung : MonoBehaviour
 
     void ZielAussuchen()
     {
-        //eigene Funktion, weil mehr Zeug vermutlich benötigt
         zeigerWechsel(false);
+
+        //hole Attacke
+        Attack attacke = spieler1[angreifenderSpieler].GetComponent<StatsCharakter>().getAttack();
+
+        //prüfe Treffer
+        Vector3 posGeg = spieler2[aktuellerSpieler].GetComponent<Transform>().position;
+        Vector3 posAng = spieler1[angreifenderSpieler].GetComponent<Transform>().position;
+
+        //debug
+        Debug.Log(attacke.hit(0, new Vector2(posGeg[0] - posAng[0], posGeg[1] - posAng[1])));
     }
 
     void endRound()
@@ -156,12 +166,14 @@ public class SpielerSteuerung : MonoBehaviour
         {
             marker.GetComponent<SpriteRenderer>().enabled = false;
             aktuellerCursor = Cursor.zielauswählen;
+            angreifenderSpieler = aktuellerSpieler;
         }
         //Rückkehr zum Bewegen
         if (!ownTeam && Input.GetKeyDown(KeyCode.F))
         {
             angriffsMarker.GetComponent<SpriteRenderer>().enabled = false;
             aktuellerCursor = Cursor.bewegen;
+            angreifenderSpieler = -1;
         }
 
         //Setzt (potentiell aktualisierten) Marker über aktuellen Charakter

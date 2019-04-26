@@ -97,5 +97,6 @@ MonoBehaviour:
   BEWEGUNG_MAX: 5
   leben: 100
   LEBEN_MAX: 100
+  attacke: AtSimpleLine
   hinderniss: {fileID: 4512715196616317922, guid: 958a22978e67bd84fa09c788e4577bb0,
     type: 3}
