@@ -102,15 +102,18 @@ public class SpielerSteuerung : MonoBehaviour
     {
         zeigerWechsel(false);
 
-        //hole Attacke
-        Attack attacke = spieler1[angreifenderSpieler].GetComponent<StatsCharakter>().getAttack();
+        if (angreifenderSpieler >= 0)
+        {
+            //hole Attacke
+            Attack attacke = spieler1[angreifenderSpieler].GetComponent<StatsCharakter>().getAttack();
 
-        //prüfe Treffer
-        Vector3 posGeg = spieler2[aktuellerSpieler].GetComponent<Transform>().position;
-        Vector3 posAng = spieler1[angreifenderSpieler].GetComponent<Transform>().position;
+            //prüfe Treffer
+            Vector3 posGeg = spieler2[aktuellerSpieler].GetComponent<Transform>().position;
+            Vector3 posAng = spieler1[angreifenderSpieler].GetComponent<Transform>().position;
 
-        //debug
-        Debug.Log(attacke.hit(0, new Vector2(posGeg[0] - posAng[0], posGeg[1] - posAng[1])));
+            //debug
+            Debug.Log(attacke.hit(0, new Vector2(posGeg[0] - posAng[0], posGeg[1] - posAng[1])));
+        }
     }
 
     void endRound()
