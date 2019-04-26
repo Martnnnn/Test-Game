@@ -168,10 +168,10 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 16
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -5807,10 +5807,9 @@ MonoBehaviour:
   spieler1: []
   spieler2: []
   spieler: []
-  anzahlSpieler1: 0
-  anzahlSpieler2: 0
   anzahlSpieler: 0
   aktuellerSpieler: 0
+  angreifenderSpieler: -1
   aktuellesZiel: 0
   marker: {fileID: 4437835300458682780, guid: 813d4baf848c33a4eac72604658c9e69, type: 3}
   angriffsMarker: {fileID: 3021521008375148934, guid: 76e9af857f07bd84d9204bd2b1b4e312,
@@ -5819,7 +5818,6 @@ MonoBehaviour:
   altPosition: {x: 0, y: 0, z: 0}
   hindernisse: []
   hindernissChild: []
-  moeglicheZiele: []
 --- !u!4 &1492050211
 Transform:
   m_ObjectHideFlags: 0
@@ -5901,8 +5899,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -499, y: -204.76}
-  m_SizeDelta: {x: 133.6, y: 64.83}
+  m_AnchoredPosition: {x: -823, y: -337}
+  m_SizeDelta: {x: 196.2, y: 120.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1648591055
 MonoBehaviour:
@@ -6012,7 +6010,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1921187725}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0.49999997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1118982939}
